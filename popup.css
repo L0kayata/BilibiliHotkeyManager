@@ -34,10 +34,11 @@ body {
 }
 
 .control-item {
-    display: flex;
+    display: grid;
+    grid-template-columns: 44px 50px 44fr;
     align-items: center;
-    justify-content: space-between;
-    padding: 8px 0;
+    gap: 12px;
+    padding: 8px 0px;
     border-bottom: 1px solid #eee;
 }
 
@@ -45,9 +46,22 @@ body {
     border-bottom: none;
 }
 
-.key-label {
-    font-weight: 500;
+.key-name {
+    font-weight: bold;
     color: #333;
+    text-align: center;
+    font-size: 16px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    display: flex;
+    justify-content: center;
+}
+
+.key-label {
+    color: #333;
+    text-align: center;
+    font-size: 16px;
+    padding-right: 0;
+    white-space: nowrap;
 }
 
 /* 开关样式 */
@@ -104,12 +118,12 @@ input:checked+.slider:before {
 
 .actions button {
     flex: 1;
-    padding: 8px 12px;
+    padding: 4px 6px;
     border: 1px solid #ddd;
     border-radius: 6px;
     background: white;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 16px;
     transition: all 0.2s;
 }
 
@@ -118,10 +132,13 @@ input:checked+.slider:before {
 }
 
 #enable-all {
-    color: #00a1d6;
-    border-color: #00a1d6;
+    color: #333;
+    border-color: #f44336;
+    white-space: nowrap;
 }
 
 #disable-all {
-    color: #666;
+    color: #333;
+    border-color: #4caf50;
+    white-space: nowrap;
 }
