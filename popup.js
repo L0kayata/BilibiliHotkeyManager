@@ -5,7 +5,12 @@ const DEFAULT_KEYS = {
     'w': false,
     'e': false,
     'r': false,
-    'f': false
+    'f': false,
+    'd': false,
+    'm': false,
+    'arrows': false,
+    'volume': false,
+    'brackets': false
 };
 
 // 初始化popup

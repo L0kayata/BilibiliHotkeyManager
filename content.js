@@ -18,7 +18,12 @@ async function loadBlockedKeys() {
             'w': false,
             'e': false,
             'r': false,
-            'f': false
+            'f': false,
+            'd': false,
+            'm': false,
+            'arrows': false,
+            'volume': false,
+            'brackets': false
         };
     } catch (error) {
         console.error('BilibiliHotkeyManager: 载入配置失败', error);
@@ -53,12 +58,28 @@ function handleKeyPress(event) {
 function shouldBlockKey(event) {
     // 检查是否为目标按键
     const key = event.key.toLowerCase();
+    let keyType = null;
+    // 单个按键检测
     if (!blockedKeys.hasOwnProperty(key)) {
+        keyType = key;
+    }
+    // 对键检测
+    if ((key === 'arrowleft' || key === 'arrowright') && blockedKeys['arrows']) {
+        keyType = 'arrows';
+    } else if ((key === 'arrowup' || key === 'arrowdown') && blockedKeys['volume']) {
+        keyType = 'volume';
+    } else if ((key === '[' || key === ']') && blockedKeys['brackets']) {
+        keyType = 'brackets';
+    } else if (blockedKeys.hasOwnProperty(key)) {
+        keyType = key;
+    }
+
+    if (!keyType) {
         return false;
     }
 
     // 检查是否启用拦截
-    if (!blockedKeys[key]) {
+    if (!blockedKeys[keyType]) {
         return false;
     }
 

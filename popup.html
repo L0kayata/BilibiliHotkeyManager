@@ -10,7 +10,6 @@
     <div class="container">
         <div class="header">
             <h3>Bilibili快捷键管理</h3>
-            <div class="site-info">bilibili.com</div>
         </div>
 
         <div class="controls">
@@ -19,7 +18,7 @@
                     <input type="checkbox" id="key-g" data-key="g">
                     <span class="slider"></span>
                 </label>
-                <span class="key-label">G：关注UP主</span>
+                <span class="key-label">G：关注</span>
             </div>
 
             <div class="control-item">
@@ -61,11 +60,51 @@
                 </label>
                 <span class="key-label">F：全屏</span>
             </div>
+
+            <div class="control-item">
+                <label class="switch">
+                    <input type="checkbox" id="key-d" data-key="d">
+                    <span class="slider"></span>
+                </label>
+                <span class="key-label">D：弹幕</span>
+            </div>
+
+            <div class="control-item">
+                <label class="switch">
+                    <input type="checkbox" id="key-d" data-key="d">
+                    <span class="slider"></span>
+                </label>
+                <span class="key-label">M：静音</span>
+            </div>
+
+            <div class="control-item">
+                <label class="switch">
+                    <input type="checkbox" id="key-arrows" data-key="arrows">
+                    <span class="slider"></span>
+                </label>
+                <span class="key-label">←→：快进</span>
+            </div>
+            
+            <div class="control-item">
+                <label class="switch">
+                    <input type="checkbox" id="key-volume" data-key="volume">
+                    <span class="slider"></span>
+                </label>
+                <span class="key-label">↑↓：音量</span>
+            </div>
+            
+            <div class="control-item">
+                <label class="switch">
+                    <input type="checkbox" id="key-brackets" data-key="brackets">
+                    <span class="slider"></span>
+                </label>
+                <span class="key-label">[]：切集</span>
+            </div>
         </div>
 
         <div class="actions">
-            <button id="enable-all">全部开启</button>
-            <button id="disable-all">全部关闭</button>
+            <button id="enable-all">全部禁用</button>
+            <button id="disable-all">全部启用</button>
         </div>
     </div>
 
