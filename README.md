@@ -1,5 +1,6 @@
 # BilibiliHotkeyManager
 Bilibili快捷键管理器
+## ![Demo](demo.png)
 ## 功能
 对Bilibili自带播放器的每个快捷键进行单独启用管理，以防止误触和冲突
 * G 关注
