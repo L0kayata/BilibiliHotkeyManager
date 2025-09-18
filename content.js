@@ -1,10 +1,17 @@
 // 当前拦截的按键配置
 let blockedKeys = {};
 
+// 添加全屏状态跟踪
+let isFullscreen = false;
+let playerContainer = null;
+let playerObserver = null;
+
 // 初始化
 (async function init() {
     await loadBlockedKeys();
     setupKeyboardInterception();
+    setupWheelInterception(); 
+    setupFullscreenDetection();
     setupMessageListener();
 })();
 
@@ -23,6 +30,7 @@ async function loadBlockedKeys() {
             'm': false,
             'arrows': false,
             'volume': false,
+            'wheel': false,  
             'brackets': false
         };
     } catch (error) {
@@ -111,6 +119,106 @@ function setupMessageListener() {
     });
 }
 
+// 设置全屏状态检测
+function setupFullscreenDetection() {
+    // 等待页面加载完成后再查找播放器
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', findPlayerContainer);
+    } else {
+        findPlayerContainer();
+    }
+}
+
+// 查找播放器容器并设置监听
+function findPlayerContainer() {
+    playerContainer = document.querySelector('.bpx-player-container');
+    if (playerContainer) {
+        // 初始检测全屏状态
+        updateFullscreenState();
+        
+        // 设置观察者监听属性变化
+        playerObserver = new MutationObserver(mutations => {
+            mutations.forEach(mutation => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-screen') {
+                    updateFullscreenState();
+                }
+            });
+        });
+        
+        playerObserver.observe(playerContainer, {
+            attributes: true,
+            attributeFilter: ['data-screen']
+        });
+    } else {
+        // 如果没找到播放器，延迟重试
+        setTimeout(findPlayerContainer, 1000);
+    }
+}
+
+// 更新全屏状态
+function updateFullscreenState() {
+    if (playerContainer) {
+        const screenMode = playerContainer.getAttribute('data-screen');
+        const newFullscreenState = screenMode === 'web' || screenMode === 'full';
+        
+        if (isFullscreen !== newFullscreenState) {
+            isFullscreen = newFullscreenState;
+            console.log(`BilibiliHotkeyManager: 全屏状态更新 - ${isFullscreen ? '是' : '否'} (${screenMode})`);
+            // 全屏状态变化时，重新评估滚轮拦截
+            updateWheelInterception();
+        }
+    }
+}
+
+// 滚轮监听器引用
+let wheelListener = null;
+
+// 设置滚轮事件拦截
+function setupWheelInterception() {
+    // 初始时不添加监听器，等需要时再添加
+    updateWheelInterception();
+}
+
+// 更新滚轮拦截状态
+function updateWheelInterception() {
+    const needsInterception = blockedKeys['wheel'] && isFullscreen;
+    
+    if (needsInterception && !wheelListener) {
+        // 需要拦截且还没有监听器时，添加监听器
+        wheelListener = handleWheel;
+        document.addEventListener('wheel', wheelListener, {
+            passive: false,
+            capture: true
+        });
+        console.log('BilibiliHotkeyManager: 已启用滚轮拦截');
+    } else if (!needsInterception && wheelListener) {
+        // 不需要拦截但有监听器时，移除监听器
+        document.removeEventListener('wheel', wheelListener, {
+            passive: false,
+            capture: true
+        });
+        wheelListener = null;
+        console.log('BilibiliHotkeyManager: 已停用滚轮拦截');
+    }
+}
+
+// 处理滚轮事件（只有在需要拦截时才会被调用）
+function handleWheel(event) {
+    // 排除在输入框中的滚轮事件
+    const target = event.target;
+    if (target && (
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.contentEditable === 'true'
+    )) {
+        return;
+    }
+    
+    event.stopPropagation();
+    event.preventDefault();
+    console.log('BilibiliHotkeyManager: 已拦截全屏滚轮事件');
+}
+
 // 扩展功能预留接口
 function addNewKey(key, enabled = false) {
     if (!blockedKeys.hasOwnProperty(key)) {
@@ -128,3 +236,22 @@ function removeKey(key) {
 
 // 调试信息
 console.log('BilibiliHotkeyManager: 内容脚本已加载');
+
+// 清理观察者和监听器
+function cleanup() {
+    if (playerObserver) {
+        playerObserver.disconnect();
+    }
+    
+    // 清理滚轮监听器
+    if (wheelListener) {
+        document.removeEventListener('wheel', wheelListener, {
+            passive: false,
+            capture: true
+        });
+        wheelListener = null;
+    }
+}
+
+// 页面卸载时清理
+window.addEventListener('beforeunload', cleanup);

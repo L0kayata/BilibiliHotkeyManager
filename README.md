@@ -14,6 +14,7 @@ Chrome插件-Bilibili快捷键管理器
 * M 静音
 * ←→ 快进
 * ↑↓ 音量
+* 滚轮 音量
 * [] 切集
 * ⚠️目前只支持Chromium内核的浏览器(Chrome、Edge等)，暂不支持Firefox和Safari
 ## 🔧安装

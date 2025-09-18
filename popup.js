@@ -10,6 +10,7 @@ const DEFAULT_KEYS = {
     'm': false,
     'arrows': false,
     'volume': false,
+    'wheel': false,
     'brackets': false
 };
 
