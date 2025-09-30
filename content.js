@@ -43,12 +43,13 @@ function setupKeyboardInterception() {
     // 使用捕获阶段拦截，确保在网站脚本之前处理
     document.addEventListener('keydown', handleKeyDown, true);
     document.addEventListener('keypress', handleKeyPress, true);
+    document.addEventListener('keyup', handleKeyUp, true);
 }
 
 // 处理keydown事件
 function handleKeyDown(event) {
     if (shouldBlockKey(event)) {
-        event.stopPropagation();
+        event.stopImmediatePropagation();
         event.preventDefault();
         console.log(`BilibiliHotkeyManager: 已拦截快捷键 ${event.key}`);
     }
@@ -57,7 +58,15 @@ function handleKeyDown(event) {
 // 处理keypress事件
 function handleKeyPress(event) {
     if (shouldBlockKey(event)) {
-        event.stopPropagation();
+        event.stopImmediatePropagation();
+        event.preventDefault();
+    }
+}
+
+// 新增 keyup 处理
+function handleKeyUp(event) {
+    if (shouldBlockKey(event)) {
+        event.stopImmediatePropagation();
         event.preventDefault();
     }
 }
