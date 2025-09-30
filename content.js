@@ -49,7 +49,7 @@ function setupKeyboardInterception() {
 // 处理keydown事件
 function handleKeyDown(event) {
     if (shouldBlockKey(event)) {
-        event.stopImmediatePropagation();
+        event.stopPropagation();
         event.preventDefault();
         console.log(`BilibiliHotkeyManager: 已拦截快捷键 ${event.key}`);
     }
@@ -58,7 +58,7 @@ function handleKeyDown(event) {
 // 处理keypress事件
 function handleKeyPress(event) {
     if (shouldBlockKey(event)) {
-        event.stopImmediatePropagation();
+        event.stopPropagation();
         event.preventDefault();
     }
 }
@@ -66,7 +66,7 @@ function handleKeyPress(event) {
 // 新增 keyup 处理
 function handleKeyUp(event) {
     if (shouldBlockKey(event)) {
-        event.stopImmediatePropagation();
+        event.stopPropagation();
         event.preventDefault();
     }
 }
