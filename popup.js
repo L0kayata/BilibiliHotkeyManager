@@ -30,7 +30,7 @@ async function loadSettings() {
         Object.keys(blockedKeys).forEach(key => {
             const checkbox = document.querySelector(`[data-key="${key}"]`);
             if (checkbox) {
-                checkbox.checked = blockedKeys[key];
+                checkbox.checked = !blockedKeys[key];
             }
         });
     } catch (error) {
@@ -59,7 +59,7 @@ function bindEvents() {
 // 处理单个按键开关
 async function handleKeyToggle(event) {
     const key = event.target.getAttribute('data-key');
-    const isBlocked = event.target.checked;
+    const isBlocked = !event.target.checked;
 
     try {
         const result = await chrome.storage.sync.get(['blockedKeys']);
@@ -93,7 +93,7 @@ async function toggleAllKeys(enabled) {
 
         // 更新UI
         document.querySelectorAll('[data-key]').forEach(checkbox => {
-            checkbox.checked = enabled;
+            checkbox.checked = !enabled;
         });
 
         // 通知content script
